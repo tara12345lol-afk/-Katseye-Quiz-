@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KATSEYE Quiz 💗</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;min-height:100vh;background:linear-gradient(135deg,#fce7f3,#ede9fe);display:flex;justify-content:center;align-items:center;color:#30243a}
+.box{width:min(92%,520px);background:white;border-radius:24px;padding:28px;box-shadow:0 10px 30px #0002}
+h1{text-align:center;margin-top:0}
+#progress{text-align:center;color:#777}
+button{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:14px;background:#fff;font-size:16px;cursor:pointer}
+button:hover{background:#fdf2f8}
+#next{background:#e9d5ff}
+#result{text-align:center;font-weight:bold;min-height:24px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🌙 KATSEYE Quiz 💗</h1>
+<p id="progress"></p>
+<h2 id="question"></h2>
+<div id="answers"></div>
+<p id="result"></p>
+<button id="next" class="hidden">Next ✨</button>
+</div>
+<script>
+const questions=[
+{q:"Who is a member of KATSEYE?",a:["Manon","Ariana Grande","Sabrina Carpenter","Dua Lipa"],c:0},
+{q:"How many members are in KATSEYE?",a:["4","5","6","7"],c:2},
+{q:"Which member is from South Korea?",a:["Yoonchae","Manon","Lara","Sophia"],c:0},
+{q:"Which member is from Switzerland?",a:["Sophia","Daniela","Manon","Megan"],c:0},
+{q:"Which of these is a KATSEYE song?",a:["Touch","Magnetic","Drama","Cupid"],c:0}
+];
+let i=0,score=0,answered=false;
+const q=document.getElementById("question"), answers=document.getElementById("answers"),
+progress=document.getElementById("progress"),result=document.getElementById("result"),next=document.getElementById("next");
+
+function show(){
+answered=false; result.textContent=""; next.classList.add("hidden");
+progress.textContent=`Question ${i+1} of ${questions.length}`;
+q.textContent=questions[i].q; answers.innerHTML="";
+questions[i].a.forEach((text,n)=>{
+ const b=document.createElement("button"); b.textContent=text;
+ b.onclick=()=>{
+  if(answered)return; answered=true;
+  if(n===questions[i].c){score++;result.textContent="✨ Correct!"}
+  else result.textContent="💗 Not quite!";
+  [...answers.children].forEach(x=>x.disabled=true);
+  next.classList.remove("hidden");
+ };
+ answers.appendChild(b);
+});
+}
+next.onclick=()=>{
+ i++;
+ if(i<questions.length) show();
+ else{
+  progress.textContent="Finished! 🎀";
+  q.textContent=`You got ${score}/${questions.length} correct!`;
+  answers.innerHTML="";
+  result.textContent=score===questions.length?"🌟 KATSEYE expert!":"💗 Thanks for playing!";
+  next.textContent="Play again";
+  next.classList.remove("hidden");
+  next.onclick=()=>{i=0;score=0;next.textContent="Next ✨";show();};
+ }
+};
+show();
+</script>
+</body>
+</html>
